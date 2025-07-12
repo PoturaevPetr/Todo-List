@@ -71,7 +71,6 @@ watch(
   () => data,
   (newData) => {
     try {
-      console.log(newData)
       localStorage.setItem('todo_app_data', JSON.stringify(newData));
       projects.value = newData.projects
       filters.value = newData.filters

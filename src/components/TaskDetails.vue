@@ -213,14 +213,21 @@ const parentTask = ref<Task[]>([]);
 const showForm = ref(false);
 const isEditing = ref(false);
 const editedTitle = ref(currentTask.value?.title)
+const isChild = ref(false);
 
 // если выбранная задача меняется
 watch(() => props.task, (newTask: Task) => {
     currentTask.value = newTask;
+    isEditing.value = false
+    editedTitle.value = currentTask.value?.title
     currentStatus.value = {
         label: statuses.value.find(s => s.value === (currentTask.value?.status ?? ''))?.label ?? '',
         value: props.task.status
     };
+    if (!isChild.value) {
+        parentTask.value = []
+    }
+    isChild.value = false
 });
 
 watch(() => props.task.status, (newStatus: string) => {
@@ -278,6 +285,7 @@ function showParentTask(task: Task) {
 }
 
 function showTaskDetails(task: Task) {
+    isChild.value = true
     parentTask.value.push({ ...currentTask.value })
     isEditing.value = false
     currentTask.value = task
@@ -286,6 +294,7 @@ function showTaskDetails(task: Task) {
         label: statuses.value.find(s => s.value === (currentTask.value?.status ?? ''))?.label ?? '',
         value: currentTask.value.status
     };
+    emit('update-task', currentTask.value)
 }
 
 // Локальная переменная для новой подзадачи
@@ -338,6 +347,7 @@ function saveTitle() {
         if (editedTitle.value && editedTitle.value.trim() != "") {
             currentTask.value.title = editedTitle.value!;
             currentTask.value.updatedAt = new Date();
+            emit('update-task', currentTask.value)
         }
         isEditing.value = false;
     }

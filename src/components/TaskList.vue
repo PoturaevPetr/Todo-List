@@ -195,6 +195,7 @@ const filters = ref<Filters>(props.filters);
 const tasks = computed(() => props.tasks ?? []);
 const selectedTask = ref<Task | null>(null);
 
+
 // Базовые статусы, можно добавить новые 
 const statuses = ref<Status[]>([
     { label: 'To Do', value: 'todo' },
@@ -230,6 +231,7 @@ function handleUpdateTask(updatedTask: Task) {
     if (index !== -1) {
         tasks.value[index] = updatedTask;
     }
+    selectedTask.value = updatedTask
 }
 
 
