@@ -1,5 +1,24 @@
-# Vue 3 + Vite
+# Vue ToDo-лист с шифрованием и фильтрацией
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Это SPA-приложение на Vue 3, реализующее ToDo-лист с функциями фильтрации, поиска, редактирования задач, а также экспортом/импортом данных с шифрованием.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+---
+
+## Основные возможности
+
+- Добавление, редактирование и удаление задач
+- Подзадачи
+- Мультифильтрация по статусам и тегам
+- Поиск по названию задач
+- Экспорт данных с шифрованием (AES)
+- Импорт данных с расшифровкой (AES)
+
+---
+
+## Быстрый запуск
+
+1. **Клонируйте репозиторий:**
+
+```bash
+git clone <ваш репозиторий или скачайте архив> 
+cd <папка проекта>
