@@ -14,10 +14,7 @@
             </h3>
             <input v-model="editedTitle" v-if="isEditing" @blur="saveTitle" @keydown.enter="saveTitle"
                 class="p-1 w-full rounded-lg text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors mb-2" />
-
         </div>
-
-
         <TaskFilter :filters="filters" :tags="tags" :statuses="statuses"/>
         <TaskForm :tasks="tasks" :tags="tags" :statuses="statuses"/>
         <!-- Колонки задач -->
@@ -57,7 +54,6 @@
                     </li>
                 </ul>
             </div>
-
             <!-- In Progress -->
             <div class="flex-1 bg-opacity-70 backdrop-blur-md rounded-xl p-1 shadow-lg" @dragover.prevent
                 @drop="handleDrop($event, 'in-progress')">
@@ -93,7 +89,6 @@
                     </li>
                 </ul>
             </div>
-
             <!-- Done -->
             <div class="flex-1 bg-opacity-70 backdrop-blur-md rounded-xl p-1 shadow-lg" @dragover.prevent
                 @drop="handleDrop($event, 'done')">

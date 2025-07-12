@@ -310,7 +310,15 @@ function showTaskDetails(task: Task) {
 // Локальная переменная для новой подзадачи
 
 function deleteTask(task: Task) {
-    emit('delete-task', task.id);
+    if (parentTask.value.length > 0) {
+        const index = parentTask.value[parentTask.value.length - 1].subtasks.findIndex(t => t.id === task.id);
+        if (index !== -1) {
+            parentTask.value[parentTask.value.length - 1].subtasks.splice(index, 1);
+        }
+        showParentTask(parentTask.value[parentTask.value.length - 1])
+    } else {
+        emit('delete-task', task.id);
+    }
 }
 
 function toggleForm() {
