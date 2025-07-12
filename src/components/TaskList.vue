@@ -186,6 +186,7 @@ watch(() => props.project, (project: Project) => {
     currentProject.value = project;
     editedTitle.value = currentProject.value.name
     isEditing.value = false
+    closeTaskDetails()
 });
 
 
