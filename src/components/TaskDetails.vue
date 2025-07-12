@@ -109,7 +109,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span><strong>Создано:</strong> {{ currentTask.createdAt.toLocaleString() }}</span>
+                    <span><strong>Создано:</strong> {{ formatDatetime(currentTask.createdAt) }}</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -117,7 +117,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span><strong>Обновлено:</strong> {{ currentTask.updatedAt.toLocaleString() }}</span>
+                    <span><strong>Обновлено:</strong> {{ formatDatetime(currentTask.updatedAt) }}</span>
                 </div>
             </div>
 
@@ -237,6 +237,16 @@ watch(() => props.task.status, (newStatus: string) => {
         value: props.task.status
     };
 });
+
+function formatDatetime (datetime: string) {
+    return new Date(datetime).toLocaleString('ru-RU', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+}
 
 const selectTag = (tag: Tags) => {
     showTagsList.value = false; // закрываем список после выбора
