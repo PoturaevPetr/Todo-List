@@ -4,14 +4,8 @@
     <aside class="w-72 bg-white bg-opacity-80 backdrop-blur-md border-r border-gray-300 rounded-xl m-2 p-2 shadow-lg">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-semibold text-gray-700">Проекты</h2>
-        <svg @click="toggleProjectForm" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke-width="1.5" stroke="currentColor"
-          class="w-6 h-6 text-gray-500 cursor-pointer hover:text-indigo-600 transition-colors duration-300">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
-        </svg>
+        <Icon @click="toggleProjectForm" name="pluscircle" class="w-6 h-6 text-gray-500 cursor-pointer hover:text-indigo-600 transition-colors duration-300" />
       </div>
-
       <!-- Форма создания проекта -->
       <div v-if="showProjectForm"
         class="border border-gray-300 rounded-xl p-3 bg-white bg-opacity-70 backdrop-blur-sm shadow-inner mb-4 transition-all duration-300 hover:scale-105">
@@ -21,16 +15,12 @@
           <div
             class="flex items-center px-2 py-1 border border-gray-300 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer transition-colors duration-300"
             @click="createProject">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="w-5 h-5 text-gray-600 mr-2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
+            <Icon name="plus" class="w-5 h-5 text-gray-600 mr-2" />
             <span class="text-sm text-gray-600">Создать</span>
           </div>
           <p class="text-xs text-gray-400">нажмите Enter</p>
         </div>
       </div>
-
       <!-- Список проектов -->
       <ul class="mt-2">
         <li v-for="project in props.projects" :key="project.id" @click="selectProject(project.id)" :class="{
@@ -108,15 +98,17 @@ function toggleProjectForm() {
 
 
 function createProject() {
-  const newProject: Project = {
-    id: uuidv4(),
-    name: projectName.value,
-    tasks: []
+  if (projectName.value.trim() !== '') {
+      const newProject: Project = {
+      id: uuidv4(),
+      name: projectName.value,
+      tasks: []
+    }
+    projects.value.push(newProject)
+    projectName.value = ''
+    showProjectForm.value = false
+    selectProject(newProject.id)
   }
-  projects.value.push(newProject)
-  projectName.value = ''
-  showProjectForm.value = false
-  selectProject(newProject.id)
 }
 
 const selectedProjectId = ref<string | null>(null);

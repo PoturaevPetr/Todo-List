@@ -8,20 +8,11 @@
                     <div v-for="tag in selectedTagsList"
                         class="rounded-lg px-2 ml-1 text-orange-700 bg-orange-200 flex items-center">
                         <p class="text-xs">{{ tag }}</p>
-                        <svg @click.stop="removeTag(tag)" xmlns="http://www.w3.org/2000/svg"
-                            class="w-3 h-3 ml-2 cursor-pointer hover:text-red-600" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <Icon @click.stop="removeTag(tag)" name="xmark" class="w-3 h-3 ml-2 cursor-pointer hover:text-red-600"/>
                     </div>
                 </div>
                 <div class="relative inline-block dropdown-custom">
-                    <svg @click="toggleTagsList" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="size-5 ml-2 text-gray-500 hover:text-gray-700">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
+                    <Icon @click="toggleTagsList" name="pluscircle" class="h-5 w-5 ml-2 text-gray-500 hover:text-gray-700"/>
                     <div v-if="showTagsList"
                         class="absolute left-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                         <input v-model="tagInput" @keydown.enter="enterTag" placeholder="Тег..."
@@ -41,20 +32,11 @@
                     <div v-for="status in statuses.filter(s => selectedStatusList.includes(s.value))"
                         class="rounded-lg text-white px-2 ml-1 bg-gray-400 flex items-center">
                         <p class="text-white text-xs">{{ status.label }}</p>
-                        <svg @click.stop="removeStatus(status)" xmlns="http://www.w3.org/2000/svg"
-                            class="w-3 h-3 ml-2 hover:cursor-pointer" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <Icon @click.stop="removeStatus(status)" name="xmark" class="w-3 h-3 ml-2 hover:cursor-pointer"/>
                     </div>
                 </div>
                 <div class="relative inline-block dropdown-custom">
-                    <svg @click="toggleStatusList" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="size-5 ml-2 text-gray-500 hover:text-gray-700">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
+                    <Icon @click="toggleStatusList" name="pluscircle" class="h-5 w-5 ml-2 text-gray-500 hover:text-gray-700"/>
                     <div v-if="showStatusList"
                         class="absolute left-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                         <ul class="py-2">
@@ -124,8 +106,10 @@ function toggleStatusList() {
 }
 
 const selectTag = (tag: Tags) => {
-    selectedTagsList.value.push(tag.label)
-    filters.value.tags = selectedTagsList.value
+    if (!selectedTagsList.value.includes(tag.label)) {
+        selectedTagsList.value.push(tag.label)
+        filters.value.tags = selectedTagsList.value
+    }
     showTagsList.value = false
 };
 

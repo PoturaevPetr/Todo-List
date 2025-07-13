@@ -8,10 +8,7 @@
                 <div class="">
                     <div class="flex items-center px-1 border border-gray-300 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer transition-colors duration-300"
                         @click="addTask">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5 text-gray-600 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
+                        <Icon @click="addTask" name="plus" class="w-5 h-5 text-gray-600 mr-2 cursor-pointer hover:text-gray-700 transition-colors"/>
                         <span class="text-sm  text-gray-600">Создать</span>
                     </div>
                     <p class="text-xs text-gray-400">нажмите Enter</p>
@@ -20,14 +17,10 @@
             <div class="flex items-center justify-between mt-2">
                 <div class="relative inline-block dropdown-custom">
                     <div @click="toggleStatusList"
-                        class="text-white flex items-center bg-gray-400 rounded-lg pl-2 hover:cursor-pointer"
+                        class="text-white flex items-center bg-gray-400 rounded-lg px-2 hover:cursor-pointer"
                         :data-value="currentStatus.value">
                         {{ currentStatus.label }}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                        </svg>
+                        <Icon name="cheveronbottom" class="w-5 h-5 ml-2"/>
                     </div>
                     <div v-if="showStatusList"
                         class="absolute left-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
@@ -41,17 +34,13 @@
                 </div>
                 <div class="flex items-center">
                     <div class="flex">
-                        <p v-for="tag in selectedTags" class="ml-1 flex items-center rounded-full bg-orange-200 px-2">
-                            {{ tag.label }}</p>
+                        <p v-for="tag in selectedTags" class="rounded-lg px-2 ml-1 text-orange-700 bg-orange-200 flex items-center">
+                            {{ tag.label }}
+                            <Icon @click.stop="removeTag(tag)" name="xmark" class="w-3 h-3 ml-2 cursor-pointer hover:text-red-600"/>
+                        </p>
                     </div>
                     <div data-area-by class="relative inline-block dropdown-custom">
-                        <svg @click="toggleTagsList" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor"
-                            class="size-6 text-gray-500 hover:cursor-pointer hover:text-gray-700">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
-                        </svg>
+                        <Icon @click="toggleTagsList" name="tag" class="h-6 w-6 text-gray-500 hover:cursor-pointer hover:text-gray-70"/>
                         <div v-if="showTagsList"
                             class="absolute right-0 top-5 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                             <input v-model="tagInput" @keydown.enter="enterTag" placeholder="Тег..."
@@ -138,6 +127,10 @@ function toggleStatusList() {
 function enterTag() {
     selectedTags.value.push({ label: tagInput.value })
     tags.value.push({ label: tagInput.value })
+}
+
+function removeTag(tag: Tags) {
+    selectedTags.value = selectedTags.value.filter(t => t.label !== tag.label)
 }
 
 
