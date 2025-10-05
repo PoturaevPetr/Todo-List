@@ -5,5 +5,4 @@ import Icon from './components/Icon.vue' // ваш компонент
 
 const app = createApp(App)
 app.component('Icon', Icon) 
-
 app.mount('#app')

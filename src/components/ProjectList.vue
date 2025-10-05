@@ -35,8 +35,6 @@
     <!-- Основная часть: контент выбранного проекта -->
     <main class="flex-1 p-2 m-2 bg-white bg-opacity-80 backdrop-blur-md rounded-xl shadow-lg">
       <div class="flex h-full w-full" v-if="currentProject">
-        <!-- <h1 class="text-3xl font-bold mb-4 text-gray-700 h-10">{{ currentProject.name }}</h1> -->
-        <!-- Тут можно вставить список задач или другой контент -->
         <TasksList :tasks="tasksCurrentProject" :filters="filters" :project="currentProject" :projects="projects"
           @projectDeleted="handleProjectDeleted" />
       </div>

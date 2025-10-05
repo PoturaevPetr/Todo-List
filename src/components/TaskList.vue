@@ -5,13 +5,14 @@
             <h3 class="w-full flex items-center justify-between text-xl font-semibold break-all mb-4 text-gray-700 cursor-pointer hover:text-gray-500"
                 @click="isEditing = true" v-if="!isEditing">
                 {{ currentProject.name }}
-                <Icon @click.stop="deleteProject(currentProject)" name="trash" class="w-5 h-5 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-300" />
+                <Icon @click.stop="deleteProject(currentProject)" name="trash"
+                    class="w-5 h-5 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-300" />
             </h3>
             <input v-model="editedTitle" v-if="isEditing" @blur="saveTitle" @keydown.enter="saveTitle"
                 class="p-1 w-full rounded-lg text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors mb-2" />
         </div>
-        <TaskFilter :filters="filters" :tags="tags" :statuses="statuses"/>
-        <TaskForm :tasks="tasks" :tags="tags" :statuses="statuses"/>
+        <TaskFilter :filters="filters" :tags="tags" :statuses="statuses" />
+        <TaskForm :tasks="tasks" :tags="tags" :statuses="statuses" />
         <!-- Колонки задач -->
         <div class="flex space-x-2 w-full h-full">
             <!-- To Do -->
@@ -21,27 +22,8 @@
                     class="text-xl font-semibold mb-4 text-gray-700 shadow-sm bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-300 p-2 rounded-lg">
                     To Do</h2>
                 <ul class="flex flex-col">
-                    <li v-for="task in tasksByStatus['todo']" :key="task.id" @click="openTaskDetails(task)"
-                        draggable="true" @dragstart="handleDragStart($event, task.id)"
-                        class="bg-white bg-opacity-80 backdrop-blur-sm p-3 rounded-xl mb-3 shadow hover:bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-100 cursor-pointer transition-transform hover:scale-101 hover:shadow-xl">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="break-all font-medium text-gray-700">{{ task.title }}</span>
-                            </div>
-                            <div>
-                                <Icon @click.stop="deleteTask(task)" name="trash" class="w-5 h-5 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-300"/>
-                            </div>
-                        </div>
-                        <div class="flex items-center mt-2">
-                            <div v-for="tag in task.tags"
-                                class="rounded-lg px-2 mr-1 text-orange-700 bg-orange-200 flex items-center">
-                                <p class="text-xs">{{ tag }}</p>
-                            </div>
-                        </div>
-                        <div v-if="task.subtasks.length > 0" class="flex justify-end items-center mt-2">
-                            <p class="text-xs text-gray-500">Вложенных: {{ task.subtasks.length }}</p>
-                        </div>
-                    </li>
+                    <TaskItem v-for="task in tasksByStatus['todo']" :key="task.id" :task="task"
+                        @delete-task="deleteTask" @open-details="openTaskDetails" @drag-start="handleDragStart" />
                 </ul>
             </div>
             <!-- In Progress -->
@@ -51,27 +33,8 @@
                     class="text-xl font-semibold mb-4 text-gray-700 shadow-sm bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-300 p-2 rounded-lg">
                     In Progress</h2>
                 <ul class="flex flex-col">
-                    <li v-for="task in tasksByStatus['in-progress']" :key="task.id" @click="openTaskDetails(task)"
-                        draggable="true" @dragstart="handleDragStart($event, task.id)"
-                        class="bg-white bg-opacity-80 backdrop-blur-sm p-3 rounded-xl mb-3 shadow hover:bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-100 cursor-pointer transition-transform hover:scale-101 hover:shadow-xl">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="break-all font-medium text-gray-700">{{ task.title }}</span>
-                            </div>
-                            <div>
-                                <Icon @click.stop="deleteTask(task)" name="trash" class="w-5 h-5 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-300"/>
-                            </div>
-                        </div>
-                        <div class="flex items-center mt-2">
-                            <div v-for="tag in task.tags"
-                                class="rounded-lg px-2 mr-1 text-orange-700 bg-orange-200 flex items-center">
-                                <p class="text-xs">{{ tag }}</p>
-                            </div>
-                        </div>
-                        <div v-if="task.subtasks.length > 0" class="flex justify-end items-center mt-2">
-                            <p class="text-xs text-gray-500">Вложенных: {{ task.subtasks.length }}</p>
-                        </div>
-                    </li>
+                    <TaskItem v-for="task in tasksByStatus['in-progress']" :key="task.id" :task="task"
+                        @delete-task="deleteTask" @open-details="openTaskDetails" @drag-start="handleDragStart" />
                 </ul>
             </div>
             <!-- Done -->
@@ -81,33 +44,14 @@
                     class="text-xl font-semibold mb-4 text-gray-700 shadow-sm bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-300 p-2 rounded-lg">
                     Done</h2>
                 <ul class="flex flex-col">
-                    <li v-for="task in tasksByStatus['done']" :key="task.id" @click="openTaskDetails(task)"
-                        draggable="true" @dragstart="handleDragStart($event, task.id)"
-                        class="bg-white bg-opacity-80 backdrop-blur-sm p-3 rounded-xl mb-3 shadow hover:bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-100 cursor-pointer transition-transform hover:scale-101 hover:shadow-xl">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="break-all font-medium text-gray-700">{{ task.title }}</span>
-                            </div>
-                            <div>
-                                <Icon @click.stop="deleteTask(task)" name="trash" class="w-5 h-5 text-gray-500 hover:text-red-500 cursor-pointer transition-colors duration-300"/>
-                            </div>
-                        </div>
-                        <div class="flex items-center mt-2">
-                            <div v-for="tag in task.tags"
-                                class="rounded-lg px-2 mr-1 text-orange-700 bg-orange-200 flex items-center">
-                                <p class="text-xs">{{ tag }}</p>
-                            </div>
-                        </div>
-                        <div v-if="task.subtasks.length > 0" class="flex justify-end items-center mt-2">
-                            <p class="text-xs text-gray-500">Вложенных: {{ task.subtasks.length }}</p>
-                        </div>
-                    </li>
+                    <TaskItem v-for="task in tasksByStatus['done']" :key="task.id" :task="task"
+                        @delete-task="deleteTask" @open-details="openTaskDetails" @drag-start="handleDragStart" />
                 </ul>
             </div>
         </div>
         <!-- Детали задачи -->
-        <TaskDetails v-if="selectedTask" :task="selectedTask" :tags="tags" :statuses="statuses" @close="closeTaskDetails" @delete-task="handleDeleteTask"
-            @update-task="handleUpdateTask" />
+        <TaskDetails v-if="selectedTask" :task="selectedTask" :tags="tags" :statuses="statuses"
+            @close="closeTaskDetails" @delete-task="handleDeleteTask" @update-task="handleUpdateTask" />
     </div>
 </template>
 
@@ -116,6 +60,7 @@ import { ref, computed, defineProps, defineEmits, watch } from 'vue';
 import TaskDetails from './TaskDetails.vue';
 import TaskForm from './TaskForm.vue';
 import TaskFilter from './TaskFilter.vue';
+import TaskItem from './TaskItem.vue';
 
 interface Task {
     id: string;                        // UUID
@@ -230,8 +175,8 @@ const tasksByStatus = computed(() => {
 
 // Метод добавления задачи
 
-function deleteTask(task: Task) {
-    const index = tasks.value.findIndex(t => t.id === task.id);
+function deleteTask(task_id: string) {
+    const index = tasks.value.findIndex(t => t.id === task_id);
     if (index !== -1) {
         tasks.value.splice(index, 1);
     }
@@ -255,7 +200,8 @@ function handleDrop(event: DragEvent, newStatus: string) {
 
 const movedTaskID = ref<string | null>(null);
 
-function handleDragStart(event: DragEvent, task_id: string) {
+function handleDragStart(task_id: string) {
+    console.log(task_id)
     movedTaskID.value = task_id
 }
 
